@@ -93,11 +93,17 @@ SQLite 데이터베이스(`pets.db`)가 자동으로 생성되며 다음 테이�
 ```
 
 ## 실행화면
+<img width="1114" height="923" alt="image" src="https://github.com/user-attachments/assets/4402f5f5-c3d8-4604-9c5a-961cfe0f6341" />
 
 <img width="1101" height="933" alt="image" src="https://github.com/user-attachments/assets/f644f400-a01d-4e4a-8628-95b27f38a17a" />
 
 <img width="454" height="565" alt="image" src="https://github.com/user-attachments/assets/92f1bce7-3077-48b7-8431-c937c269243b" />
 
 <img width="394" height="581" alt="image" src="https://github.com/user-attachments/assets/5aa1eb10-b804-46f6-9e1a-18ac32820dae" />
+
+<img width="875" height="912" alt="image" src="https://github.com/user-attachments/assets/cffc77f7-a1a3-4465-8522-83c555400d11" />
+<img width="878" height="923" alt="image" src="https://github.com/user-attachments/assets/fed5069f-58c7-4cf7-b4cf-a14900b5f8b7" />
+<img width="836" height="709" alt="image" src="https://github.com/user-attachments/assets/27828579-2a14-4977-89d6-cb6aa7b8d0e8" />
+
 
 
