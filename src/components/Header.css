@@ -11,6 +11,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 0;
+  gap: 20px;
 }
 
 .logo {
@@ -59,6 +60,55 @@
   background-color: rgba(74, 144, 226, 0.1);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.btn-login,
+.btn-logout {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-login {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-login:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-logout {
+  background-color: transparent;
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+}
+
+.btn-logout:hover {
+  background-color: var(--bg-light);
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -69,5 +119,10 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
   }
 }

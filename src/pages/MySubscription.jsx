@@ -1,31 +1,49 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getSubscriptions, cancelSubscription as cancelSubscriptionAPI } from '../api/api'
 import './MySubscription.css'
 
 function MySubscription() {
   const navigate = useNavigate()
   const [subscriptions, setSubscriptions] = useState([])
-  const [pets, setPets] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const savedSubscriptions = JSON.parse(localStorage.getItem('subscriptions') || '[]')
-    const savedPets = JSON.parse(localStorage.getItem('pets') || '[]')
-    setSubscriptions(savedSubscriptions)
-    setPets(savedPets)
+    loadSubscriptions()
   }, [])
 
-  const cancelSubscription = (id) => {
-    if (window.confirm('정말 구독을 취소하시겠습니까?')) {
-      const updated = subscriptions.map(sub => 
-        sub.id === id ? { ...sub, status: 'cancelled' } : sub
-      )
-      setSubscriptions(updated)
-      localStorage.setItem('subscriptions', JSON.stringify(updated))
-      alert('구독이 취소되었습니다.')
+  const loadSubscriptions = async () => {
+    try {
+      const data = await getSubscriptions()
+      setSubscriptions(data)
+    } catch (error) {
+      console.error('구독 목록 로드 오류:', error)
+      alert('구독 정보를 불러오는데 실패했습니다. 서버가 실행 중인지 확인해주세요.')
+    }
+  }
+
+  const cancelSubscription = async (id) => {
+    if (!window.confirm('정말 구독을 취소하시겠습니까?')) return
+    
+    setLoading(true)
+    try {
+      const result = await cancelSubscriptionAPI(id)
+      if (result.success) {
+        alert('구독이 취소되었습니다.')
+        loadSubscriptions() // 목록 새로고침
+      } else {
+        alert(result.message || '취소에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('구독 취소 오류:', error)
+      alert('구독 취소 중 오류가 발생했습니다.')
+    } finally {
+      setLoading(false)
     }
   }
 
   const formatDate = (dateString) => {
+    if (!dateString) return '-'
     const date = new Date(dateString)
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
@@ -111,8 +129,9 @@ function MySubscription() {
                     <button
                       onClick={() => cancelSubscription(sub.id)}
                       className="btn btn-outline btn-danger"
+                      disabled={loading}
                     >
-                      구독 취소
+                      {loading ? '처리 중...' : '구독 취소'}
                     </button>
                   </div>
                 </div>

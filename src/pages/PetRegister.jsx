@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { registerPet } from '../api/api'
 import './PetRegister.css'
 
 function PetRegister() {
@@ -14,6 +15,7 @@ function PetRegister() {
     health: '',
     allergies: ''
   })
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     setFormData({
@@ -22,18 +24,29 @@ function PetRegister() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // 로컬 스토리지에 저장 (실제로는 API 호출)
-    const pets = JSON.parse(localStorage.getItem('pets') || '[]')
-    const newPet = {
-      ...formData,
-      id: Date.now()
+    setLoading(true)
+    
+    try {
+      const result = await registerPet({
+        ...formData,
+        age: parseInt(formData.age),
+        weight: parseFloat(formData.weight)
+      })
+      
+      if (result.success) {
+        alert('반려동물 정보가 등록되었습니다!')
+        navigate('/meal-plan')
+      } else {
+        alert(result.message || '등록에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('등록 오류:', error)
+      alert('등록 중 오류가 발생했습니다. 서버가 실행 중인지 확인해주세요.')
+    } finally {
+      setLoading(false)
     }
-    pets.push(newPet)
-    localStorage.setItem('pets', JSON.stringify(pets))
-    alert('반려동물 정보가 등록되었습니다!')
-    navigate('/meal-plan')
   }
 
   return (
@@ -157,8 +170,8 @@ function PetRegister() {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              등록하고 식단 추천받기
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? '등록 중...' : '등록하고 식단 추천받기'}
             </button>
           </div>
         </form>

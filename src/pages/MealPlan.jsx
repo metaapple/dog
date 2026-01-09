@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getPets, subscribeMealPlan } from '../api/api'
 import './MealPlan.css'
 
 function MealPlan() {
@@ -12,15 +13,25 @@ function MealPlan() {
     servings: 2,
     startDate: ''
   })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const savedPets = JSON.parse(localStorage.getItem('pets') || '[]')
-    setPets(savedPets)
-    if (savedPets.length > 0) {
-      setSelectedPet(savedPets[0])
-      generateMealPlans(savedPets[0])
-    }
+    loadPets()
   }, [])
+
+  const loadPets = async () => {
+    try {
+      const petsData = await getPets()
+      setPets(petsData)
+      if (petsData.length > 0) {
+        setSelectedPet(petsData[0])
+        generateMealPlans(petsData[0])
+      }
+    } catch (error) {
+      console.error('반려동물 목록 로드 오류:', error)
+      alert('반려동물 정보를 불러오는데 실패했습니다. 서버가 실행 중인지 확인해주세요.')
+    }
+  }
 
   const generateMealPlans = (pet) => {
     // 간단한 맞춤형 식단 생성 로직 (실제로는 API 호출)
@@ -100,23 +111,32 @@ function MealPlan() {
     }
   }
 
-  const handleSubscribe = (plan) => {
-    const subscriptions = JSON.parse(localStorage.getItem('subscriptions') || '[]')
-    const newSubscription = {
-      id: Date.now(),
-      petId: selectedPet.id,
-      petName: selectedPet.name,
-      planId: plan.id,
-      planName: plan.name,
-      ...subscription,
-      price: plan.price,
-      status: 'active',
-      createdAt: new Date().toISOString()
+  const handleSubscribe = async (plan) => {
+    if (!selectedPet) return
+    
+    setLoading(true)
+    try {
+      const result = await subscribeMealPlan({
+        petId: selectedPet.id,
+        planName: plan.name,
+        planId: plan.id,
+        frequency: subscription.frequency,
+        servings: subscription.servings,
+        price: plan.price
+      })
+      
+      if (result.success) {
+        alert('구독이 완료되었습니다!')
+        navigate('/my-subscription')
+      } else {
+        alert(result.message || '구독에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('구독 오류:', error)
+      alert('구독 중 오류가 발생했습니다. 서버가 실행 중인지 확인해주세요.')
+    } finally {
+      setLoading(false)
     }
-    subscriptions.push(newSubscription)
-    localStorage.setItem('subscriptions', JSON.stringify(subscriptions))
-    alert('구독이 완료되었습니다!')
-    navigate('/my-subscription')
   }
 
   if (pets.length === 0) {
@@ -243,8 +263,9 @@ function MealPlan() {
                   <button
                     onClick={() => handleSubscribe(plan)}
                     className="btn btn-primary btn-full"
+                    disabled={loading}
                   >
-                    구독하기
+                    {loading ? '처리 중...' : '구독하기'}
                   </button>
                 </div>
               </div>

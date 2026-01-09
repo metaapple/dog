@@ -1,45 +1,97 @@
-# React + Vite
+# 펫밀 - 반려동물 맞춤형 식단 구독 서비스
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+반려동물의 종, 나이, 체중, 활동량 등을 분석하여 맞춤형 식단을 추천하고 구독할 수 있는 웹 애플리케이션입니다.
 
-Currently, two official plugins are available:
+## 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🐾 반려동물 정보 등록 및 관리
+- 🍽️ 맞춤형 식단 추천
+- 📦 구독 관리
+- 💾 SQLite 데이터베이스를 통한 데이터 저장
 
-## React Compiler
+## 기술 스택
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 프론트엔드
+- React 19
+- React Router
+- Vite
 
-## Expanding the ESLint configuration
+### 백엔드
+- Node.js
+- Express
+- SQLite (better-sqlite3)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 설치 및 실행
 
+### 1. 패키지 설치
 
-<hr>
-## 실행결과
-<img width="1491" height="705" alt="image" src="https://github.com/user-attachments/assets/694aff08-e123-4d6f-851d-c03f590c3f51" />
+```bash
+npm install
+```
 
-<img width="1446" height="746" alt="image" src="https://github.com/user-attachments/assets/7b1021a4-f788-48aa-b113-27ddb0c856de" />
+### 2. 개발 서버 실행
 
-<img width="1458" height="812" alt="image" src="https://github.com/user-attachments/assets/66832c0d-6f5d-466a-8a60-17e6cf4fb967" />
+#### 방법 1: 서버와 프론트엔드를 동시에 실행 (권장)
 
+```bash
+npm run dev:all
+```
 
+#### 방법 2: 별도 터미널에서 실행
 
-<img width="1098" height="930" alt="image" src="https://github.com/user-attachments/assets/cc2b2ccb-2fde-44af-998b-59afc4d28017" />
+**터미널 1 - 백엔드 서버:**
+```bash
+npm run server
+```
 
-<img width="766" height="243" alt="image" src="https://github.com/user-attachments/assets/90f1ef4d-c869-4c99-a073-b0ba5e5f25dd" />
+**터미널 2 - 프론트엔드:**
+```bash
+npm run dev
+```
 
-<img width="1117" height="440" alt="image" src="https://github.com/user-attachments/assets/d098c872-f664-47b2-ace6-8aaba53c40d7" />
+### 3. 접속
 
-<img width="1211" height="924" alt="image" src="https://github.com/user-attachments/assets/1ebd6d07-9b97-4d11-a882-e630b8d67114" />
-<img width="1068" height="743" alt="image" src="https://github.com/user-attachments/assets/a5eb568d-3d3e-4d40-8a7f-16726fd661ca" />
-<img width="1107" height="482" alt="image" src="https://github.com/user-attachments/assets/329ca259-b7dc-4c48-8cff-c98ead69023a" />
+- 프론트엔드: http://localhost:5173
+- 백엔드 API: http://localhost:3001
 
-<img width="1134" height="887" alt="image" src="https://github.com/user-attachments/assets/2b533c04-b5ad-4962-a9f0-fc38e2d9272d" />
+## API 엔드포인트
 
+### 반려동물 관련
+- `POST /api/pets` - 반려동물 등록
+- `GET /api/pets` - 반려동물 목록 조회
+- `GET /api/pets/:id` - 반려동물 상세 조회
 
+### 구독 관련
+- `POST /api/subscriptions` - 구독 등록
+- `GET /api/subscriptions` - 구독 목록 조회
+- `PATCH /api/subscriptions/:id/cancel` - 구독 취소
 
+## 데이터베이스
 
+SQLite 데이터베이스(`pets.db`)가 자동으로 생성되며 다음 테이블을 포함합니다:
 
+- `pets` - 반려동물 정보
+- `subscriptions` - 구독 정보
 
+## 프로젝트 구조
+
+```
+.
+├── server.js              # Express 서버
+├── src/
+│   ├── api/
+│   │   └── api.js         # API 호출 함수
+│   ├── components/
+│   │   └── Header.jsx     # 헤더 컴포넌트
+│   ├── pages/
+│   │   ├── Home.jsx       # 홈페이지
+│   │   ├── PetRegister.jsx # 반려동물 등록
+│   │   ├── MealPlan.jsx   # 식단 추천
+│   │   └── MySubscription.jsx # 구독 관리
+│   └── App.jsx            # 메인 앱 컴포넌트
+└── package.json
+```
+
+## 라이센스
+
+MIT

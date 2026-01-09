@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 import './Home.css'
 
 function Home() {
+  const { isAuthenticated } = useAuth()
+  
   return (
     <div className="home">
       {/* Hero Section */}
@@ -17,12 +20,25 @@ function Home() {
               건강한 반려동물을 만들어보세요
             </p>
             <div className="hero-buttons">
-              <Link to="/pet-register" className="btn btn-primary">
-                시작하기
-              </Link>
-              <Link to="/meal-plan" className="btn btn-outline">
-                식단 알아보기
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link to="/pet-register" className="btn btn-primary">
+                    시작하기
+                  </Link>
+                  <Link to="/meal-plan" className="btn btn-outline">
+                    식단 알아보기
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="btn btn-primary">
+                    로그인하고 시작하기
+                  </Link>
+                  <Link to="/login" className="btn btn-outline">
+                    회원가입
+                  </Link>
+                </>
+              )}
             </div>
           </div>
           <div className="hero-image">
@@ -110,9 +126,15 @@ function Home() {
           <div className="cta-content">
             <h2>지금 시작하세요</h2>
             <p>반려동물의 건강한 식단 관리, 지금 바로 시작해보세요.</p>
-            <Link to="/pet-register" className="btn btn-primary btn-large">
-              무료로 시작하기
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/pet-register" className="btn btn-primary btn-large">
+                반려동물 등록하기
+              </Link>
+            ) : (
+              <Link to="/login" className="btn btn-primary btn-large">
+                무료로 시작하기
+              </Link>
+            )}
           </div>
         </div>
       </section>
