@@ -92,6 +92,12 @@ SQLite 데이터베이스(`pets.db`)가 자동으로 생성되며 다음 테이�
 └── package.json
 ```
 
-## 라이센스
+## 실행화면
 
-MIT
+<img width="1101" height="933" alt="image" src="https://github.com/user-attachments/assets/f644f400-a01d-4e4a-8628-95b27f38a17a" />
+
+<img width="454" height="565" alt="image" src="https://github.com/user-attachments/assets/92f1bce7-3077-48b7-8431-c937c269243b" />
+
+<img width="394" height="581" alt="image" src="https://github.com/user-attachments/assets/5aa1eb10-b804-46f6-9e1a-18ac32820dae" />
+
+
