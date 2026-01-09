@@ -46,6 +46,14 @@
   border: 1px solid #fcc;
 }
 
+.error-message code {
+  background-color: #fdd;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
 .login-footer {
   text-align: center;
   padding-top: 20px;

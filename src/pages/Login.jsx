@@ -41,7 +41,17 @@ function Login() {
         body: JSON.stringify(formData),
       })
 
-      const data = await response.json()
+      // 네트워크 오류 확인
+      if (!response.ok && response.status === 0) {
+        throw new Error('서버에 연결할 수 없습니다.')
+      }
+
+      let data
+      try {
+        data = await response.json()
+      } catch (parseError) {
+        throw new Error('서버 응답을 처리할 수 없습니다.')
+      }
 
       if (data.success) {
         login(data.user, data.token)
@@ -51,7 +61,11 @@ function Login() {
       }
     } catch (error) {
       console.error('인증 오류:', error)
-      setError('서버 연결에 실패했습니다. 서버가 실행 중인지 확인해주세요.')
+      if (error.message === 'Failed to fetch' || error.message.includes('fetch')) {
+        setError('서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요. (npm run server 또는 npm run dev:all)')
+      } else {
+        setError(error.message || '서버 연결에 실패했습니다. 서버가 실행 중인지 확인해주세요.')
+      }
     } finally {
       setLoading(false)
     }
@@ -107,7 +121,20 @@ function Login() {
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <div className="error-message">
+              {error}
+              {error.includes('서버에 연결할 수 없습니다') && (
+                <div style={{ marginTop: '10px', fontSize: '13px', color: '#666' }}>
+                  <strong>해결 방법:</strong>
+                  <br />
+                  1. 터미널에서 <code>npm run server</code> 실행
+                  <br />
+                  2. 또는 <code>npm run dev:all</code>로 서버와 프론트엔드 동시 실행
+                </div>
+              )}
+            </div>
+          )}
 
           <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
             {loading ? '처리 중...' : (isLogin ? '로그인' : '회원가입')}

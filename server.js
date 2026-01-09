@@ -16,8 +16,13 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 app.use(cors())
 app.use(express.json())
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // SQLite 데이터베이스 연결
-const db = new Database(join(__dirname, 'pets.db'))
+const db = new Database(join(__dirname, 'pets_v2.db'))
 
 // 데이터베이스 초기화
 db.exec(`
@@ -151,7 +156,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     // 사용자 조회
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email)
-    
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -161,7 +166,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     // 비밀번호 확인
     const isValidPassword = await bcrypt.compare(password, user.password)
-    
+
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,
@@ -198,7 +203,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/auth/me', authenticateToken, (req, res) => {
   try {
     const user = db.prepare('SELECT id, email, name, created_at FROM users WHERE id = ?').get(req.user.id)
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -230,7 +235,7 @@ app.post('/api/pets', authenticateToken, (req, res) => {
     `)
 
     const result = stmt.run(userId, name, type, breed, age, weight, activity, health || '', allergies || '')
-    
+
     res.json({
       success: true,
       id: result.lastInsertRowid,
@@ -250,7 +255,7 @@ app.get('/api/pets', authenticateToken, (req, res) => {
     const userId = req.user.id
     const stmt = db.prepare('SELECT * FROM pets WHERE user_id = ? ORDER BY created_at DESC')
     const pets = stmt.all(userId)
-    
+
     res.json({
       success: true,
       data: pets
@@ -270,14 +275,14 @@ app.get('/api/pets/:id', authenticateToken, (req, res) => {
     const userId = req.user.id
     const stmt = db.prepare('SELECT * FROM pets WHERE id = ? AND user_id = ?')
     const pet = stmt.get(id, userId)
-    
+
     if (!pet) {
       return res.status(404).json({
         success: false,
         message: '반려동물을 찾을 수 없습니다.'
       })
     }
-    
+
     res.json({
       success: true,
       data: pet
@@ -311,7 +316,7 @@ app.post('/api/subscriptions', authenticateToken, (req, res) => {
     `)
 
     const result = stmt.run(userId, petId, planName, planId, frequency, servings || 2, price)
-    
+
     res.json({
       success: true,
       id: result.lastInsertRowid,
@@ -340,7 +345,7 @@ app.get('/api/subscriptions', authenticateToken, (req, res) => {
       ORDER BY s.created_at DESC
     `)
     const subscriptions = stmt.all(userId)
-    
+
     res.json({
       success: true,
       data: subscriptions
@@ -358,7 +363,7 @@ app.patch('/api/subscriptions/:id/cancel', authenticateToken, (req, res) => {
   try {
     const { id } = req.params
     const userId = req.user.id
-    
+
     // 구독이 해당 사용자의 것인지 확인
     const subscription = db.prepare('SELECT id FROM subscriptions WHERE id = ? AND user_id = ?').get(id, userId)
     if (!subscription) {
@@ -367,17 +372,17 @@ app.patch('/api/subscriptions/:id/cancel', authenticateToken, (req, res) => {
         message: '해당 구독에 대한 권한이 없습니다.'
       })
     }
-    
+
     const stmt = db.prepare('UPDATE subscriptions SET status = ? WHERE id = ? AND user_id = ?')
     const result = stmt.run('cancelled', id, userId)
-    
+
     if (result.changes === 0) {
       return res.status(404).json({
         success: false,
         message: '구독을 찾을 수 없습니다.'
       })
     }
-    
+
     res.json({
       success: true,
       message: '구독이 취소되었습니다.'
@@ -388,6 +393,42 @@ app.patch('/api/subscriptions/:id/cancel', authenticateToken, (req, res) => {
       message: error.message
     })
   }
+})
+
+// API 루트 경로
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: '펫밀 API 서버입니다.',
+    version: '1.0.0',
+    endpoints: {
+      auth: {
+        register: 'POST /api/auth/register',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me'
+      },
+      pets: {
+        list: 'GET /api/pets',
+        create: 'POST /api/pets',
+        get: 'GET /api/pets/:id'
+      },
+      subscriptions: {
+        list: 'GET /api/subscriptions',
+        create: 'POST /api/subscriptions',
+        cancel: 'PATCH /api/subscriptions/:id/cancel'
+      }
+    }
+  })
+})
+
+// 404 핸들러
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: '요청하신 경로를 찾을 수 없습니다.',
+    path: req.path,
+    method: req.method
+  })
 })
 
 app.listen(PORT, () => {

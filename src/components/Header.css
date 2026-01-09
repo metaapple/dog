@@ -17,15 +17,38 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 36px;
+  font-weight: 800;
   color: var(--primary-color);
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-8px) rotate(-5deg);
+  }
+
+  75% {
+    transform: translateY(-4px) rotate(5deg);
+  }
 }
 
 .logo-icon {
-  font-size: 32px;
+  font-size: 52px;
+  display: inline-block;
+  animation: bounce 2s infinite ease-in-out;
 }
 
 .logo-text {
@@ -33,6 +56,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -1px;
 }
 
 .nav {

@@ -27,14 +27,14 @@ function PetRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    
+
     try {
       const result = await registerPet({
         ...formData,
         age: parseInt(formData.age),
         weight: parseFloat(formData.weight)
       })
-      
+
       if (result.success) {
         alert('반려동물 정보가 등록되었습니다!')
         navigate('/meal-plan')
@@ -43,7 +43,7 @@ function PetRegister() {
       }
     } catch (error) {
       console.error('등록 오류:', error)
-      alert('등록 중 오류가 발생했습니다. 서버가 실행 중인지 확인해주세요.')
+      alert(`오류가 발생했습니다: ${error.message}\n서버가 실행 중인지 확인해주세요.`)
     } finally {
       setLoading(false)
     }

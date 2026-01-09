@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import './Home.css'
+import heroPets from '../assets/hero_pets.png'
+import freshFood from '../assets/fresh_food.png'
 
 function Home() {
   const { isAuthenticated } = useAuth()
-  
+
   return (
     <div className="home">
       {/* Hero Section */}
@@ -42,7 +44,7 @@ function Home() {
             </div>
           </div>
           <div className="hero-image">
-            <div className="hero-illustration">🐕🐱</div>
+            <img src={heroPets} alt="Happy dog and cat" className="hero-photo" />
           </div>
         </div>
       </section>
@@ -77,12 +79,16 @@ function Home() {
               </p>
             </div>
             <div className="feature-card card">
-              <div className="feature-icon">💚</div>
-              <h3>신선한 재료</h3>
-              <p>
-                인증된 재료만을 사용하여
-                안전하고 신선한 식단을 제공합니다.
-              </p>
+              <div className="feature-image-container">
+                <img src={freshFood} alt="Fresh ingredients" />
+              </div>
+              <div className="feature-content">
+                <h3>신선한 재료</h3>
+                <p>
+                  인증된 재료만을 사용하여
+                  안전하고 신선한 식단을 제공합니다.
+                </p>
+              </div>
             </div>
           </div>
         </div>
