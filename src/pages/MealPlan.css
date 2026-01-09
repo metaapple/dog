@@ -1,0 +1,218 @@
+.meal-plan {
+  flex: 1;
+  padding: 60px 0;
+  background-color: var(--bg-light);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.empty-state h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+}
+
+.empty-state p {
+  font-size: 18px;
+  color: var(--text-light);
+  margin-bottom: 30px;
+}
+
+.pet-selector {
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.pet-selector label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.pet-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.pet-info-card {
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+.pet-info-card h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+.pet-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.pet-info-grid div {
+  padding: 10px;
+  background: var(--bg-light);
+  border-radius: 6px;
+}
+
+.pet-info-grid strong {
+  color: var(--primary-color);
+  margin-right: 8px;
+}
+
+.meal-plans {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.meal-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.meal-plan-card {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.meal-plan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.plan-header h3 {
+  font-size: 24px;
+  color: var(--text-dark);
+  flex: 1;
+}
+
+.plan-price {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-align: right;
+}
+
+.price-unit {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text-light);
+}
+
+.plan-description {
+  color: var(--text-light);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.plan-nutrition {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: var(--bg-light);
+  border-radius: 8px;
+}
+
+.plan-nutrition h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.nutrition-label {
+  display: block;
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.nutrition-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.plan-features {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.plan-features h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.plan-features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.plan-features li {
+  padding: 6px 0;
+  color: var(--text-light);
+}
+
+.plan-actions {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid var(--border-color);
+}
+
+.frequency-select {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .meal-plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nutrition-grid {
+    grid-template-columns: 1fr;
+  }
+}
